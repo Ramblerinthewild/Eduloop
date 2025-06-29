@@ -2,13 +2,11 @@
 <html>
     <head> 
         <title>Eduloop</title>
+        <!--Css for the page-->
         <style>
+
             html { font-size: 20px;}
-            @media (max-width: 600px) {
-                html {
-                    font-size: 120px; /* bigger on phones */
-                }
-            }
+            
 
             body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
@@ -19,14 +17,87 @@
 
             #messages { list-style-type: none; margin: 0; padding: 0; }
             #messages > li { padding: 0.5rem 1rem; }
-            #messages > li:nth-child(odd) { background: #efefef; }
+            
+
+            .bubblefromperson {
+                background-color: aquamarine;
+                position: relative;
+                border-radius: 0rem 0.5rem 0.5rem 0.5rem;
+                padding: 0.3rem;
+                display: inline-block;
+                text-align: left;
+                max-width: 70%;
+            }
+
+            .ptriangle.bubblefromperson::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: .61rem;
+                width: 0;
+                height: 0;
+                border: 0.5rem solid transparent;
+                border-right-color: aquamarine;
+                border-left: 0;
+                border-top: 0;
+                margin-top: -0.6rem;
+                margin-left: -0.5rem;
+
+            }
+            .bubblefromyou {
+                background-color: rgb(127, 176, 255);
+                position: relative;
+                border-radius: 0.5rem 0rem 0.5rem 0.5rem;
+                padding: 0.3rem;
+                display: inline-block;
+                text-align: right;
+                max-width: 70%;
+                margin-right: -0.5rem;
+            }
+
+            .triangle.bubblefromyou::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: .61rem;
+                width: 0;
+                height: 0;
+                border: 0.5rem solid transparent;
+                border-left-color: rgb(127, 176, 255);
+                border-right: 0;
+                border-top: 0;
+                margin-top: -0.6rem;
+                margin-right: -0.5rem;
+
+            }
+
+            .fromyou {
+                display: inline-block;
+                margin-right: .5rem;
+                word-wrap: break-word;
+                white-space: normal;
+            }
+
+            .you {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .fromperson {
+                white-space: normal;
+                word-wrap: break-word;
+                max-width: 70%;
+                display: inline-block;
+            }
+
         </style>
     </head>
     
     <body> 
+        <!---->
         <ul id="messages"></ul>
         <form id="form" action="">
-            <input id="input" autocomplete="off" />
+            <input id="input" autocomplete="off"  />
             <button>Send</button>
         </form>
     </body>
@@ -47,7 +118,14 @@
 
         socket.on('chat message', function(msg) {
             var item = document.createElement('li');
-            item.textContent = msg;
+            var text_bubble = document.createElement('div');
+
+            text_bubble.textContent = msg;
+            text_bubble.className = 'bubblefromyou triangle fromyou';
+            
+            item.appendChild(text_bubble);
+            item.className = 'you'
+
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
