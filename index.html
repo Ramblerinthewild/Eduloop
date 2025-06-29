@@ -120,12 +120,14 @@
             var item = document.createElement('li');
             var text_bubble = document.createElement('div');
 
-            text_bubble.textContent = msg;
-            text_bubble.className = 'bubblefromyou triangle fromyou';
-            
+            text_bubble.textContent = msg.text;
+            if (msg.from === 'your') {
+                text_bubble.className = 'bubblefromyou triangle fromyou';
+                item.className = 'you';
+            } else {
+                text_bubble.className = 'bubblefromperson ptriangle fromperson';
+            }
             item.appendChild(text_bubble);
-            item.className = 'you'
-
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
