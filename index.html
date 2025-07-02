@@ -8,19 +8,19 @@
             html { font-size: 20px;}
             
 
-            body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+            body { background-color: #2d2d2d; margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
-            #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-            #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+            #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 23%; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+            #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; background-color: #464646; color: white; }
             #input:focus { outline: none; }
-            #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 20rem; outline: none; color: #fff; }
+            #form > button { background: none; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 20rem; outline: none; color: #fff; }
 
             #messages { list-style-type: none; margin: 0; padding: 0; }
             #messages > li { padding: 0.5rem 1rem; }
             
 
             .bubblefromperson {
-                background-color: aquamarine;
+                background-color: rgb(255, 173, 173);
                 position: relative;
                 border-radius: 0rem 0.5rem 0.5rem 0.5rem;
                 padding: 0.3rem;
@@ -40,7 +40,7 @@
                 width: 0;
                 height: 0;
                 border: 0.5rem solid transparent;
-                border-right-color: aquamarine;
+                border-right-color: rgb(255, 173, 173);
                 border-left: 0;
                 border-top: 0;
                 margin-top: -0.6rem;
@@ -48,7 +48,7 @@
 
             }
             .bubblefromyou {
-                background-color: rgb(127, 176, 255);
+                background-color: rgb(164, 199, 255);
                 position: relative;
                 border-radius: 0.5rem 0rem 0.5rem 0.5rem;
                 padding: 0.3rem;
@@ -67,7 +67,7 @@
                 width: 0;
                 height: 0;
                 border: 0.5rem solid transparent;
-                border-left-color: rgb(127, 176, 255);
+                border-left-color: rgb(164, 199, 255);
                 border-right: 0;
                 border-top: 0;
                 margin-top: -0.6rem;
@@ -98,7 +98,7 @@
                 width: 1rem; 
                 height: 1rem;
                 border-radius: 50%;
-                background-color: black;
+                background-color: rgb(255, 255, 255);
                 margin: 0.3rem;
                 flex-shrink: 0;
                 display: flex;
@@ -111,26 +111,43 @@
                 justify-content: flex-start;
             }
 
-            .sidebar {
-                width: 23%;
-                height: 100vh; 
-                background-color: aqua;
-                
+            .main {
+                position: absolute;
+                left: 23%;
+                margin-left: 0;
+                width: 77%;
             }
 
+            .container {
+                
+                height: 100%;
+                background-color: rgb(31, 31, 31);
+                position: fixed;
+                z-index: 1;
+                overflow-x: 0;
+                top: 0;
+                left: 0; 
+                width: 23%;
+
+            }
+
+            
         </style>
     </head>
     
     <body> 
+        <div class="main">
+            <ul id="messages"></ul>
+            <form id="form" action="">
+                <input id="input" autocomplete="off"  />
+                <button font-size: 2rem;>+</button>
+                <button>🔺</button>
+            </form> 
+        </div>
         <!---->
-        <ul id="messages"></ul>
-        <form id="form" action="">
-            <input id="input" autocomplete="off"  />
-            <button>🔺</button>
-            <button>📁</button>
-        </form>
-        <div class='sidebar'>
-            
+        
+        <div class='container'>
+            <div class='sidebar'></div>
         </div>
     </body>
     <script src="/socket.io/socket.io.js"></script>
