@@ -12,6 +12,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'))
 });
 
+app.use('/icons', express.static(__dirname + '/icons' )),
+
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
