@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>Eduloop</title>
+        <!--Css for the page-->
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            html { font-size: 20px;}
+
+            body { background-color: #2d2d2d; margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+            #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 23%; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+            #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; background-color: #464646; color: white; }
+            #input:focus { outline: none; }
+            #form > button { background: none; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 20rem; outline: none; color: #fff; }
+
+            #messages { list-style-type: none; margin: 0; padding: 0; }
+            #messages > li { padding: 0.5rem 1rem; }
+            #sidebar {
+                margin-top: 3rem;
+                align-content: center;
+                
+            }
+            #sidebar > button {
+                background: none;
+                justify-content: flex-start;
+                border: none;
+                margin-left: 0rem;
+                margin-top: 0rem;
+                margin-bottom: 0.3rem;
+                margin-right: 0;
+                display: flex;
+                font-size: 1rem;
+                width: 100%;
+                color: white;
+                box-sizing: box-border;
+                border-radius: 0.5rem;
+                transition-duration: 0.3s;
+            }
+            #sidebar > button:hover {
+                background-color: grey;
+            }
+
+
+            
+
+                .bubblefromperson {
+                    background-color: rgb(255, 173, 173);
+                    position: relative;
+                    border-radius: 0rem 0.5rem 0.5rem 0.5rem;
+                    padding: 0.3rem;
+                    display: inline-block;
+                    text-align: left;
+                    max-width: 70%;
+                    margin-left: 0.1rem;
+                    box-shadow: -0.1rem 0.1rem 0.1rem rgb(43, 43, 43);
+                }
+
+                .ptriangle.bubblefromperson::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: .61rem;
+                    width: 0;
+                    height: 0;
+                    border: 0.5rem solid transparent;
+                    border-right-color: rgb(255, 173, 173);
+                    border-left: 0;
+                    border-top: 0;
+                    margin-top: -0.6rem;
+                    margin-left: -0.5rem;
+
+                }
+                .bubblefromyou {
+                    background-color: rgb(164, 199, 255);
+                    position: relative;
+                    border-radius: 0.5rem 0rem 0.5rem 0.5rem;
+                    padding: 0.3rem;
+                    display: inline-block;
+                    text-align: right;
+                    max-width: 70%;
+                    margin-right: -0.1rem;
+                    box-shadow: 0.1rem 0.1rem 0.1rem rgb(43, 43, 43);
+                    
+                }
+
+                .triangle.bubblefromyou::after {
+                    content: '';
+                    position: absolute;
+                    right: 0;
+                    top: .61rem;
+                    width: 0;
+                    height: 0;
+                    border: 0.5rem solid transparent;
+                    border-left-color: rgb(164, 199, 255);
+                    border-right: 0;
+                    border-top: 0;
+                    margin-top: -0.6rem;
+                    margin-right: -0.5rem;
+
+                }
+
+                .fromyou {
+                    display: inline-block;
+                    margin-right: .189rem;
+                    word-wrap: break-word;
+                    white-space: normal;
+                }
+
+                .you {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                .fromperson {
+                    white-space: normal;
+                    word-wrap: break-word;
+                    max-width: 70%;
+                    display: inline-block;
+                }
+
+                .pfp {
+                    width: 1rem;
+                    height: 1rem;
+                    border-radius: 50%;
+                    background-color: rgb(255, 255, 255);
+                    margin: 0.3rem;
+                    flex-shrink: 0;
+                    display: flex;
+                    justify-content: flex-start;
+
+                }
+
+                .person {
+                    display: flex;
+                    justify-content: flex-start;
+                }
+
+                .main {
+                    margin-left: 23%;
+                    margin-top: 5%;
+                
+                }
+
+                .container {
+                    padding-left: 0.3rem;
+                    box-sizing: border-box;
+                    height: 100%;
+                    background-color: rgb(31, 31, 31);
+                    position: fixed;
+                    z-index: 1;
+                    overflow-x: 0; /*not valid*/
+                    top: 0;
+                    left: 0;
+                    width: 23%;
+                }
+
+                .btu {
+                    font-size: 2rem;
+                    color: white;
+                }
+
+                .openbtn {
+                    position: fixed; 
+                    left: 0%;
+                    background: none;
+                    font-size: 1.5rem;
+                    outline: none; 
+                    font-weight: bold;
+                    color: white; 
+                    border: none;
+                    margin-left: 0.3rem;
+                }
+
+            @media (max-width: 1024px) {
+                .container {
+                    background-color: blue;
+                    width: 15%;
+                }
+                #form {left: 15%;}
+            
+            }
+
+            .openbtn img {
+                width: 50px;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .chatbar {
+                color: white;
+                display: flex;
+                position: fixed;
+                right: 0;
+                top: 0;
+                width: 77%;
+                height: 9%;
+                background-color: #2d2d2d;
+                display: flex; 
+                flex-direction: column;
+                justify-content: center;
+                padding-left: 2rem;
+                font-size: 1.4rem;
+                box-sizing: border-box;
+                border-bottom: 2px solid rgb(89, 89, 89);
+                z-index: 10;
+            }
+
+            .task {
+                z-index: 11;
+                display: flex;
+                justify-content: flex-end;
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 9%; 
+                flex-direction: column; 
+                justify-content: center;
+                background: none;
+                border: none;
+                color: white;
+                margin-right: 1rem;
+            }
+
+            .task img {
+                width: 40px; 
+                height: auto;
+                object-fit: contain;
+            }
+
+
+            .menu {
+                display: none;
+                position: fixed;
+                right: 0; 
+                width: 74%; 
+                height: 69%; 
+                background-color: #1e1e1e;
+                border-radius: 0.5rem;
+                margin-right: 0.9rem;
+                z-index: 10;
+                flex-direction: column;
+                align-items: center;
+                top: 11%;
+                overflow-y: auto;
+            }
+
+            .heading { 
+                color: white; 
+                z-index: 11; 
+                background-color: #1e1e1e;
+                height: 2rem;
+                width: 90%;
+                display: flex;
+                align-items: left;
+                position: relative;
+                flex-direction: column;
+                justify-content: flex-start;
+                line-height: 2rem;
+            }
+
+            .ques {
+                background-color: #1e1e1e;
+                height: 85%; 
+                width: 95%;
+                border-top: solid grey 1px;
+                margin-bottom: 0.9rem;
+                display: non
+            }
+            #addtask {
+                position: absolute; 
+                display: flex;
+                right: -1%;
+                width: 1rem;
+            
+            }
+            
+            .tasksin {
+                color: white; 
+                font-size: 0.8rem;
+                margin: 0.2rem;
+            }
+            
+        
+    
+            
+            #taskin > input {
+                background-color: #1e1e1e;
+                border: solid grey 1px;
+                border-radius: 0.3rem;
+                transition-duration: 0.3s;
+                margin-bottom: 0.3rem;
+                color: white;
+                height: 1.1rem;
+            }
+            #taskin > input:hover {
+                border: solid blue 1px;
+            }
+            
+            .listotasks {
+                background-color: #1e1e1e;
+                height: 85%; 
+                width: 95%;
+                border-top: solid grey 1px;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .tasks {
+                color: white;
+                background-color: #1e1e1e;
+                height: 3rem;
+                box-sizing: border-box;
+                border-top: solid white 1px;
+                border-bottom: solid white 1px;
+                width: 100%;
+            }
+            
+            #tasktracker {
+                list-style-type: none;
+                width: 100%;
+                position: relative;
+
+            }
+
+        </style>
+    </head>
+    
+    <body>
+        <div id="name" class="chatbar">
+            <p id="roomname"></p>
+        </div>
+
+        <button onclick="OpenMenu()" class="task">
+            <img src="icons/task.png">
+        </button>
+
+        <div class="menu" id="menu"> 
+            <div class="heading">Task Tracker
+                <button id="addtask" onclick="OpenInput()">
+                    c
+                </button>
+            </div>
+            <div class="ques" id="addtasks" style="display: none">
+                <form id="taskin" style="display: flex; flex-direction: column; width: 40%;">
+                    <label class='tasksin' for="taskname" style="margin-top: 0.5rem;">Task name</label><input type="text" name="taskname" id="taskname">
+                    <label class='tasksin' for="description">Description</label><textarea name="description" id="description" type="text" style="height: 2rem; overflow-y: auto; background: none; font-family: inherit; color: white;"></textarea>
+                    <label class='tasksin' for="datedue" >Due date</label><input name="datedue" id="datedue" type="date" >
+                    <button type="button" id="submit" onclick="submitTask()" style="color: white; background-color: grey; width: 60px; border-radius: 0.3rem; border: none;">
+                        Submit
+                    </button>
+                </form>
+            </div>
+            <div id="list" class="listotasks" style="display: flex;">
+                <ul id="tasktracker">
+                </ul>
+            </div>
+        </div>
+
+        <div id="main" class="main">
+            <ul id="messages"></ul>
+            <form id="form" action="">
+                <input id="input" autocomplete="off"  />
+                <input type="file" id="myfile" style="display: none;">
+                <button type="button" class="btu" formaction="attachments/" formenctype="multipart/form-data" formmethod="post" onclick="document.getElementById('myfile').click()">+</button>
+                <button type="submit" >
+                    <img style="width: 30px; height: auto; object-fit: contain;" src="icons/sends.png"> 
+                </button>
+            </form>
+        </div>
+
+        <div id= 'mysidebar' class='container'>
+            <button class="openbtn" onclick="openNav()"><img src="icons/image.png"></button>
+            <div id='sidebar'>
+                <button class="buttons" onclick="Roomswitch('Announcements')">
+                    Announcements
+                </button>
+                <button class="buttons" onclick="Roomswitch('Main')">
+                    Main
+                </button>
+                <button class="buttons" onclick="Roomswitch('General Chat')">
+                    General Chat
+                </button>
+                <button class="buttons" onclick="Roomswitch('Memes')">
+                    Memes
+                </button>
+            </div>
+        </div>
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script> 
+        var socket = io();
+
+        let currentRoom = 'Main'
+        socket.emit('join room', currentRoom)
+        document.getElementById('roomname').innerHTML = currentRoom;
+
+
+        function Roomswitch(Room) { 
+            currentRoom = Room; 
+            socket.emit('join room', currentRoom); 
+            document.getElementById('messages').innerHTML = '';
+            document.getElementById('roomname').innerHTML = currentRoom;
+            if (document.getElementById('menu').style.display === 'flex') {
+                document.getElementById('menu').style.display = "none";
+            }
+        }; 
+
+        function OpenMenu() { 
+            if (document.getElementById('menu').style.display === 'none') {
+                document.getElementById('menu').style.display = "flex";
+            } else {
+                document.getElementById('menu').style.display = "none";
+            }
+            
+        }        
+
+        function OpenInput() {
+            if (document.getElementById('addtasks').style.display === 'none') {
+                document.getElementById('addtasks').style.display = 'flex';
+                document.getElementById('menu').style.marginBottom = "0.6rem";
+            } else {
+                document.getElementById('addtasks').style.display = 'none';
+            }
+        }
+        function submitTask() {
+            // Get form values (you can add your submission logic here)
+            const taskName = document.getElementById('taskname').value;
+            const description = document.getElementById('description').value;
+            let tasklist = document.getElementById('tasktracker');
+
+            let tasklistitem = document.createElement('li');
+            tasklistitem.textContent = taskName;
+            tasklistitem.className = "tasks";
+            tasklist.appendChild(tasklistitem);
+            // Clear the form
+            
+            // Clear the form
+            document.getElementById('taskin').reset();
+            
+            // Optionally hide the form after submission
+            document.getElementById('addtasks').style.display = 'none';
+        }
+
+        var sidebarLength = document.getElementById('mysidebar');
+
+        function openNav() {
+            if (sidebarLength.style.width === "5%"){
+                document.getElementById('mysidebar').style.width = '23%';
+                document.getElementById('main').style.marginLeft= '23%';
+                document.getElementById('form').style.left = "23%";
+                document.getElementById('name').style.width = "77%";
+                Array.from(document.getElementsByClassName("buttons")).forEach(button => {
+                    button.style.fontSize="1rem";
+                });
+            } else {
+                document.getElementById('mysidebar').style.width = '5%';
+                document.getElementById('form').style.left = "5%";
+                document.getElementById('main').style.marginLeft= '5%';
+                document.getElementById('name').style.width = "95%";
+                Array.from(document.getElementsByClassName("buttons")).forEach(button => {
+                    button.style.fontSize="0";
+                });
+            };
+        };
+
+        
+        
+
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', {msg: input.value, room: currentRoom});
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            var text_bubble = document.createElement('div');
+            var pfp = document.createElement('div');
+
+            pfp.className = 'pfp';
+
+                // Check if it's a file message
+            if (msg.isFile) {
+
+                const imageExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+                const fileext = msg.fileName.split('.').pop().toLowerCase();
+
+                if (imageExt.includes(fileext)) {
+                    var img = document.createElement('img');
+                    img.src = msg.fileUrl;
+                    img.alt = msg.fileName;
+                    img.style.maxWidth = '300px';
+                    img.style.maxHeight = '300px';
+                    img.style.borderRadius = '8px';
+                    img.style.cursor = 'pointer';
+                    
+                    // Make image clickable to open in new tab
+                    img.onclick = function() {
+                        window.open(msg.fileUrl, '_blank');
+                    };
+                    
+                    text_bubble.appendChild(img);
+                } else {
+                    // Create a clickable download link
+                    var fileLink = document.createElement('a');
+                    fileLink.href = msg.fileUrl;
+                    fileLink.download = msg.fileName;
+                    fileLink.textContent = `📎 ${msg.fileName}`;
+                    fileLink.style.color = 'blue';
+                    fileLink.style.textDecoration = 'underline';
+                    text_bubble.appendChild(fileLink);
+                }
+                
+            } else {
+                // Regular text message
+                text_bubble.textContent = msg.text;
+            };
+
+            if (msg.from === 'your') {
+                text_bubble.className = 'bubblefromyou triangle fromyou';
+                item.className = 'you';
+                item.appendChild(text_bubble);
+                item.appendChild(pfp);
+            } else {
+                text_bubble.className = 'bubblefromperson ptriangle fromperson';
+                item.className = 'person';
+                item.appendChild(pfp);
+                item.appendChild(text_bubble);
+            }
+            
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        // File upload handler - just copy paste this
+        var fileInput = document.getElementById('myfile');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                fetch('/attachments', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('File uploaded:', data);
+                    // Send file info instead of plain text
+                    socket.emit('chat message', {
+                        isFile: true,
+                        fileName: file.name,
+                        fileUrl: data.url,
+                        room: currentRoom
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                
+                fileInput.value = '';
+            }
+        });
+
+    </script>
+</html>
