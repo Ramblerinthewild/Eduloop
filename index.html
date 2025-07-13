@@ -172,15 +172,6 @@
                     margin-left: 0.3rem;
                 }
 
-            @media (max-width: 1024px) {
-                .container {
-                    background-color: blue;
-                    width: 15%;
-                }
-                #form {left: 15%;}
-            
-            }
-
             .openbtn img {
                 width: 50px;
                 height: auto;
@@ -271,8 +262,13 @@
                 position: absolute; 
                 display: flex;
                 right: -1%;
-                width: 1rem;
-            
+                width: auto;
+                background: none;
+                border: none;
+                height: 25px;
+                object-fit: contain;
+                margin-top: 0.5rem;
+                
             }
             
             .tasksin {
@@ -294,7 +290,7 @@
                 height: 1.1rem;
             }
             #taskin > input:hover {
-                border: solid blue 1px;
+                border: solid rgb(117, 117, 255) 1px;
             }
             
             .listotasks {
@@ -304,47 +300,123 @@
                 border-top: solid grey 1px;
                 display: flex;
                 justify-content: center;
+                overflow-y: auto;
             }
             
             .tasks {
                 color: white;
                 background-color: #1e1e1e;
-                height: 3rem;
+                min-height: 4rem;
                 box-sizing: border-box;
-                border-top: solid white 1px;
-                border-bottom: solid white 1px;
+                border: solid #535353 1px;
+                border-radius: 0.5rem;
+                margin-bottom: 0.5rem;
+                padding: 0.75rem;
+                display: flex;
+                flex-direction: column;
                 width: 100%;
+                font-size: 0.8rem
             }
+
+            .namespan {
+                font-size: 1rem;
+                font-weight: bold;
+                color: #87ceeb;
+                margin-bottom: 0.3rem;
+                word-wrap: break-word;
+            }
+            
+            .desspan {
+                font-size: 0.8rem;
+                color: #ccc;
+                margin-bottom: 0.3rem;
+                word-wrap: break-word;
+                line-height: 1.2;
+            }
+            
+            .datespan {
+                font-size: 0.7rem;
+                color: #ffa500;
+                font-weight: bold;
+                margin-bottom: 0.4rem;
+            }
+
             
             #tasktracker {
                 list-style-type: none;
                 width: 100%;
                 position: relative;
-
+                margin: 0;
             }
 
+            .message-content {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .message-content .username {
+            font-size: 0.6rem;
+            color: #212121;
+            align-self: flex-start;
+            margin-top: -1rem;
+            font-family: 'Courier New', Courier, monospace;
+            }
+
+            .message-content .usernameother {
+            font-size: 0.6rem;
+            color: #212121;
+            align-self: flex-end;
+            margin-top: -1rem;
+            font-family: 'Courier New', Courier, monospace;
+            }
+
+            .delete-btn {
+                display: flex;
+                flex-direction: column;
+                font-size: 1rem; 
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(56, 155, 255, 0.635);
+                border-color: rgb(0, 153, 255);
+                color: white;
+                width: 100%;
+                border-radius: 0.5rem;
+            }
+
+            .delete-btn:hover {
+                background-color: rgba(56, 156, 255, 0.701);
+            }
         </style>
     </head>
     
     <body>
+
+        <div id="usernameModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="margin: auto; background: #2d2d2d; padding: 2rem; border-radius: 0.5rem;">
+                <h3 style="color: white;">Enter your username:</h3>
+                <input type="text" id="usernameInput" style="padding: 0.5rem; margin: 1rem 0;">
+                <button onclick="setUsername()" style="padding: 0.5rem 1rem;">Join Chat</button>
+            </div>
+        </div>
+
         <div id="name" class="chatbar">
             <p id="roomname"></p>
         </div>
 
         <button onclick="OpenMenu()" class="task">
-            <img src="icons/task.png">
+            <img id="taskmanager" src="icons/task.png">
         </button>
 
         <div class="menu" id="menu"> 
             <div class="heading">Task Tracker
                 <button id="addtask" onclick="OpenInput()">
-                    c
+                    <img src="icons/addtask.png">
                 </button>
             </div>
             <div class="ques" id="addtasks" style="display: none">
                 <form id="taskin" style="display: flex; flex-direction: column; width: 40%;">
                     <label class='tasksin' for="taskname" style="margin-top: 0.5rem;">Task name</label><input type="text" name="taskname" id="taskname">
-                    <label class='tasksin' for="description">Description</label><textarea name="description" id="description" type="text" style="height: 2rem; overflow-y: auto; background: none; font-family: inherit; color: white;"></textarea>
+                    <label class='tasksin' for="description">Description</label><textarea maxlength="300" name="description" id="description" type="text" style="height: 2rem; overflow-y: auto; background: none; font-family: inherit; color: white;"></textarea>
                     <label class='tasksin' for="datedue" >Due date</label><input name="datedue" id="datedue" type="date" >
                     <button type="button" id="submit" onclick="submitTask()" style="color: white; background-color: grey; width: 60px; border-radius: 0.3rem; border: none;">
                         Submit
@@ -360,7 +432,7 @@
         <div id="main" class="main">
             <ul id="messages"></ul>
             <form id="form" action="">
-                <input id="input" autocomplete="off"  />
+                <input id="input" autocomplete="off" placeholder="Type your message" />
                 <input type="file" id="myfile" style="display: none;">
                 <button type="button" class="btu" formaction="attachments/" formenctype="multipart/form-data" formmethod="post" onclick="document.getElementById('myfile').click()">+</button>
                 <button type="submit" >
@@ -375,8 +447,8 @@
                 <button class="buttons" onclick="Roomswitch('Announcements')">
                     Announcements
                 </button>
-                <button class="buttons" onclick="Roomswitch('Main')">
-                    Main
+                <button class="buttons" onclick="Roomswitch('Club promo')">
+                    Club promo 
                 </button>
                 <button class="buttons" onclick="Roomswitch('General Chat')">
                     General Chat
@@ -395,6 +467,16 @@
         socket.emit('join room', currentRoom)
         document.getElementById('roomname').innerHTML = currentRoom;
 
+        let currentUsername = null;
+
+        function setUsername() {
+            const input = document.getElementById('usernameInput');
+            if (input.value.trim()) {
+                currentUsername = input.value.trim();
+                socket.emit('set username', currentUsername);
+                document.getElementById('usernameModal').style.display = 'none';
+            }
+        };
 
         function Roomswitch(Room) { 
             currentRoom = Room; 
@@ -423,24 +505,65 @@
                 document.getElementById('addtasks').style.display = 'none';
             }
         }
+
         function submitTask() {
-            // Get form values (you can add your submission logic here)
+            // Get form values
+
+            let deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Task Complete';
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.onclick = function() {
+                deleteTask(tasklistitem);
+            };
+
             const taskName = document.getElementById('taskname').value;
             const description = document.getElementById('description').value;
-            let tasklist = document.getElementById('tasktracker');
+            const date = document.getElementById('datedue').value;
+
+            // Validate inputs
+            if (!taskName.trim()) {
+                alert('Please enter a task name');
+                return;
+            };
 
             let tasklistitem = document.createElement('li');
-            tasklistitem.textContent = taskName;
+
+            let namespan = document.createElement('span');
+            let desspan = document.createElement('span');
+            let datespan = document.createElement('span');
+
+            namespan.className = 'namespan';
+            namespan.textContent = taskName;
+            desspan.className = 'desspan';
+            desspan.textContent = description || 'No description provided';
+            datespan.className = 'datespan';
+            datespan.textContent = date ? `Due: ${date}` : 'No due date';
+
+            tasklistitem.appendChild(namespan);
+            tasklistitem.appendChild(desspan);
+            tasklistitem.appendChild(datespan);
+            tasklistitem.appendChild(deleteBtn);
+
             tasklistitem.className = "tasks";
+
+            let tasklist = document.getElementById('tasktracker');
             tasklist.appendChild(tasklistitem);
-            // Clear the form
-            
+
             // Clear the form
             document.getElementById('taskin').reset();
-            
-            // Optionally hide the form after submission
+
+            // Hide the form after submission
             document.getElementById('addtasks').style.display = 'none';
+            document.getElementById('taskmanager').src = "icons/alert.png";
         }
+
+        function deleteTask(taskElement) {
+            taskElement.remove(); 
+            let tasklist = document.getElementById('tasktracker');
+            if (document.getElementById('tasktracker').children.length === 0) {
+                document.getElementById('taskmanager').src = "icons/addtask.png";
+            }
+        };
 
         var sidebarLength = document.getElementById('mysidebar');
 
@@ -463,20 +586,6 @@
                 });
             };
         };
-
-        
-        
-
-        var form = document.getElementById('form');
-        var input = document.getElementById('input');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (input.value) {
-                socket.emit('chat message', {msg: input.value, room: currentRoom});
-                input.value = '';
-            }
-        });
 
         socket.on('chat message', function(msg) {
             var item = document.createElement('li');
@@ -516,18 +625,56 @@
                     fileLink.style.textDecoration = 'underline';
                     text_bubble.appendChild(fileLink);
                 }
+                if (msg.from === 'your') {
+                    text_bubble.className = 'bubblefromyou triangle fromyou';
+                    item.className = 'you';
+                    item.appendChild(text_bubble);
+                    item.appendChild(pfp);
+                } else {
+                    text_bubble.className = 'bubblefromperson ptriangle fromperson';
+                    item.className = 'person';
+                    item.appendChild(pfp);
+                    item.appendChild(text_bubble);
+                }
+
+                messages.appendChild(item);
+
                 
             } else {
                 // Regular text message
-                text_bubble.textContent = msg.text;
-            };
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'text';
+                textSpan.textContent = msg.text || `[File: ${msg.fileName}]`;
 
             if (msg.from === 'your') {
+                const usernameSpan = document.createElement('span');
+                usernameSpan.className = 'username';
+                usernameSpan.textContent = `${msg.username}`;
+
+                // Put them together
+                messageContent.appendChild(textSpan);
+                messageContent.appendChild(document.createElement('br'));
+                messageContent.appendChild(usernameSpan);
+                text_bubble.appendChild(messageContent);
+
                 text_bubble.className = 'bubblefromyou triangle fromyou';
                 item.className = 'you';
                 item.appendChild(text_bubble);
                 item.appendChild(pfp);
             } else {
+                const usernameSpan = document.createElement('span');
+                usernameSpan.className = 'usernameother';
+                usernameSpan.textContent = `${msg.username}`;
+
+                // Put them together
+                messageContent.appendChild(textSpan);
+                messageContent.appendChild(document.createElement('br'));
+                messageContent.appendChild(usernameSpan);
+                text_bubble.appendChild(messageContent);
                 text_bubble.className = 'bubblefromperson ptriangle fromperson';
                 item.className = 'person';
                 item.appendChild(pfp);
@@ -535,8 +682,22 @@
             }
             
             messages.appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
+            window.scrollTo(0, document.body.scrollHeight);};
         });
+    
+
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', {msg: input.value, room: currentRoom, username: currentUsername});
+                input.value = '';
+            }
+        });
+
+
 
         // File upload handler - just copy paste this
         var fileInput = document.getElementById('myfile');
@@ -559,7 +720,8 @@
                         isFile: true,
                         fileName: file.name,
                         fileUrl: data.url,
-                        room: currentRoom
+                        room: currentRoom,
+                        username: currentUsername
                     });
                 })
                 .catch(error => {

@@ -63,6 +63,12 @@ io.on('connection', (socket) => {
         console.log('a user disconnected');
     });
 
+    
+    socket.on('set username', (username) => {
+        socket.username = username;
+        console.log(`User set username: ${username}`);
+    });
+
     socket.on('join room', (room) => {
         for (const r of socket.rooms) {
             if (r !== socket.id) {
@@ -82,6 +88,7 @@ io.on('connection', (socket) => {
                 fileName: data.fileName,
                 fileUrl: data.fileUrl,
                 from: 'other',
+                username: socket.username
             });
 
             socket.emit('chat message', {
@@ -89,11 +96,12 @@ io.on('connection', (socket) => {
                 fileName: data.fileName,
                 fileUrl: data.fileUrl,
                 from: 'your',
+                username: socket.username
             });
         } else {
-            socket.to(data.room).emit('chat message', {text: data.msg, from: 'other'});
+            socket.to(data.room).emit('chat message', {text: data.msg, from: 'other', username: socket.username});
 
-            socket.emit('chat message', {text: data.msg, from: 'your'})
+            socket.emit('chat message', {text: data.msg, from: 'your', username: socket.username})
         }
     });
     
